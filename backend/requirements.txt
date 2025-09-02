@@ -1,7 +1,7 @@
-
 fastapi
 uvicorn
 langchain
 chromadb
 openai
 tiktoken
+langchain-community

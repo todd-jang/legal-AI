@@ -1,9 +1,14 @@
-
-# React Dockerfile
-FROM node:18
+# build environment
+FROM node:18 as build
 WORKDIR /app
 COPY package.json ./
 RUN npm install
-COPY . .
-RUN npm start
-CMD ["npm", "start"]
+COPY . ./
+RUN npm run build
+
+# production environment
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
